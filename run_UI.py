@@ -34,12 +34,10 @@ with open(path, mode='r') as f:
 for image in imagelist:
     if os.path.isdir(image) and os.path.exists(image+'/test_list.txt'):
         images=image+'/test_list.txt'
-        if args.fit_imagenum==1: input_len=sum([1 for _ in open(path)])
+        if args.fit_imagenum==1: input_len=sum([1 for _ in open(image+'/test_list.txt')])-1
         tl=list()#time list
         savedir=image+'_'+str(datetime.now().strftime('%B%d  %H:%M:%S'))
         startt=time.time()
-
-        tl.append([image+'start',time.time()-startt])
 
         print(image+'_start')
         prediction_error=r.run_PredNet(images, sequences, gpu, root, initmodel, resume, \
@@ -49,4 +47,5 @@ for image in imagelist:
         np.savetxt(savedir+'/prediction_error.csv',prediction_error)
 
         with open(savedir + '/runtime.txt', mode='a') as f:
+            tl.append([image+'_network runtime',time.time()-startt])
             f.write("%s\n" % tl[len(tl) - 1])

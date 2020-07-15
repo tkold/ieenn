@@ -2,38 +2,46 @@ import os
 import time
 from natsort import natsorted
 from recalc import node_analysis as na
-from recalc import r_util
+from recalc import optical_flow as op
+
+#switch
+#1: node parameter
+#2: optical flow
+#3: optical flow
+
+rootpath='runs'
+size=[160,120]
+
+sw=2
+
 
 def analyzes(savedir, tl, startt):
     with open(savedir + '/runtime.txt', mode='a') as f:
+
+        if sw==1:#node parameter
+            experiment = list()
+            for dir in natsorted(os.listdir(savedir + '/act')):
+                experiment.append(savedir + '/act/' + dir)
+
+            na.get_nodedata(experiment, savedir)
+            tl.append(['output error time series', time.time()])
+
+        elif sw==2:
+
+            op.lucas_kanade(savedir+'/images','test_19y_0.jpg', 'test_19y_1.jpg',dtct_rm=[(size[0]-1)/2,(size[1]-1)/2])
+            tl.append(['optical flow (Lucas-Kanade)', time.time()-startt])
+
+        elif sw==3:
+            op.farneback(savedir+'/images','test_19y_0.jpg', 'test_19y_1.jpg',dtct_rm=[(size[0]-1)/2,(size[1]-1)/2])
+            tl.append(['optical flow (Farneback)', time.time()-startt])
+
         f.write("%s\n" % tl[len(tl) - 1])
 
-        r_util.del_node_params(savedir)
+for savedir in natsorted(os.listdir(rootpath)):
 
-        tl.append(['end', time.time() - startt - tl[len(tl) - 1][1]])
-        f.write("%s\n" % tl[len(tl) - 1])
-
-        experiment = list()
-        for dir in natsorted(os.listdir(savedir + '/act')):
-            experiment.append(savedir + '/act/' + dir)
-
-        print('start_get_nodedata')
-        na.get_nodedata(experiment, savedir)
-        tl.append(['output error time series', time.time() - startt - tl[len(tl) - 1][1]])
-        f.write("%s\n" % tl[len(tl) - 1])
-
-        tl.append(['total', time.time() - startt])
-        f.write("%s\n" % tl[len(tl) - 1])
-
-    return 0
-
-
-for savedir in natsorted(os.listdir('runs')):
-    savedir = 'runs/' + savedir
-    with open(savedir + '/runtime.txt', mode='a') as f:
-        f.write("addtional analysis\n")
-    print('start_analysis',savedir)
-    tl=list()#time list
-    startt=time.time()
-    tl.append(['analysis start',time.time()-startt])
-    analyzes(savedir, tl, startt)
+    savedir = rootpath + '/' + savedir
+    if os.path.exists(savedir + '/runtime.txt'):
+        print('start_analysis',savedir)
+        tl=list()#time list
+        startt=time.time()
+        analyzes(savedir, tl, startt)

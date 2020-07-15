@@ -4,8 +4,9 @@ import numpy as np
 from natsort import natsorted
 from datetime import datetime
 from util import dotmdf as dot
-from util import util as util
+from util import util
 import graph as g
+import cv2
 
 def get_nodedata(experiment, imageroot):
     rootpath = imageroot + '/nodedata'
@@ -247,3 +248,4 @@ def graphdata_make(grouplist,param,sw=0):
                 headline=headline.rstrip(',')
                 np.savetxt(imgpath, graphdata, header=headline)
     return imgroot
+

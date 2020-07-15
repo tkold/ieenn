@@ -33,3 +33,20 @@ def del_node_params(experiment):
             dirpath=experiment + '/' + fol + '/' + dir
             if os.path.isfile(dirpath) and ('.csv in dir'):
                 os.remove(dirpath)
+
+def actsum(data):
+
+    sum=0.0
+    for d in data:
+        if d > 0: sum += d
+
+    return sum
+
+
+def supsum(data):
+
+    sum = 0.0
+    for d in data:
+        if d < 0: sum += d
+
+    return sum

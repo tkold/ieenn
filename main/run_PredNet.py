@@ -145,8 +145,8 @@ def run_PredNet(images='', sequences='', gpu=-1, root='.', initmodel='', resume=
                 loss.unchain_backward()
                 loss = 0
                 if gpu >= 0: model.to_cpu()
-                write_image(x_batch[0].copy(), save_root+'/images/test_' + str(i) + 'x.png')
-                write_image(model.y.data[0].copy(), save_root+'/images/test_' + str(i) + 'y_0.png')
+                write_image(x_batch[0].copy(), save_root+'/images/test_' + str(i) + 'x.jpg')
+                write_image(model.y.data[0].copy(), save_root+'/images/test_' + str(i) + 'y_0.jpg')
                 if gpu >= 0: model.to_gpu()
 
                 if i == 0 or (input_len > 0 and i % input_len != 0):
@@ -194,10 +194,10 @@ def run_PredNet(images='', sequences='', gpu=-1, root='.', initmodel='', resume=
                     loss = 0
                     optimizer.update()
                     if gpu >= 0: model.to_cpu()
-                    write_image(x_batch[0].copy(), save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'x.png')
+                    write_image(x_batch[0].copy(), save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'x.jpg')
                     write_image(model.y.data[0].copy(),
-                                save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'y.png')
-                    write_image(y_batch[0].copy(), save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'z.png')
+                                save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'y.jpg')
+                    write_image(y_batch[0].copy(), save_root+'/images/' + str(count) + '_' + str(seq) + '_' + str(i) + 'z.jpg')
                     if gpu >= 0: model.to_gpu()
                     print('loss:' + str(float(model.loss.data)))
                     logf.write(str(i) + ', ' + str(float(model.loss.data)) + '\n')
